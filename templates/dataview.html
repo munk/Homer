@@ -1,0 +1,20 @@
+<!doctype html>
+<title>NYC DOH Inspection Data</title>
+<link rel=stylesheet type=text/css href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css">
+<div class=page>
+  {% block body %}
+  <h1>Data</h1>
+  <div class=metanav>
+  {% if zipcode %}
+      <div>Showing data for {{ zipcode }}</div>
+  {% else %}
+  {% endif %}
+  </div>
+  <table class="table table-striped">
+      <tr><th>DBA</th><th>SCORE</th><td>PHONE</th></tr>
+  {% for item in data %}
+  <tr><td> {{ item['DBA']}}</td><td>{{ item['SCORE'] }}</td><td>{{ item['PHONE'] }}</td></tr>
+  {% endfor %}
+  </table>
+  {% endblock %}
+</div>
