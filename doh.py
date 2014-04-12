@@ -10,7 +10,7 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def hello():
-    return "Hello World!"
+    return "NYC DOH STATS"
 
 @app.route("/stats/<int:zipcode>")
 def stats(zipcode):
