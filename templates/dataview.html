@@ -10,11 +10,21 @@
   {% else %}
   {% endif %}
   </div>
+  <div class="container">
+  <div class="col-md-8">
   <table class="table table-striped">
-      <tr><th>DBA</th><th>SCORE</th><td>PHONE</th></tr>
+      <tr><th>DBA</th><th>Grade</th><th>Date</th></tr>
   {% for item in data %}
-  <tr><td> {{ item['DBA']}}</td><td>{{ item['SCORE'] }}</td><td>{{ item['PHONE'] }}</td></tr>
+      {% if item['_id']['grade']  %}
+          <tr>
+              <td>{{ item['_id']['dba']}}</td>
+              <td>{{ item['_id']['grade'] }}</td>
+              <td>{{ item['RECORDDATE'].date() }}</td>
+          </tr>
+      {% endif %}
   {% endfor %}
   </table>
+  </div>
+  </div>
   {% endblock %}
 </div>
