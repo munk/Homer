@@ -1,4 +1,4 @@
-from flask import Flask, render_template
+from flask import Flask, render_template, request, redirect, url_for
 from flask.ext.pymongo import PyMongo
 import mongolab_cred as mc
 
@@ -25,6 +25,26 @@ def get_grades(zipcode):
 @app.route("/")
 def hello():
     return render_template('index.html')
+
+@app.route("/search", methods=["POST"])
+def search():
+    query = request.form.get('q')
+    if query is None:
+        return redirect(url_for("hello"))
+    if len(query) == 5:
+        try:
+            int(query)
+            return "zipcode " + query
+        except ValueError:
+            pass  #it's maybe a name?
+    if len(query) == 10:
+        try:
+            int(query)
+            return "phone " + query
+        except ValueError:
+            pass #it's maybe a name?
+    return "Business Name " + query
+       
 
 @app.route("/stats/<int:zipcode>")
 def stats(zipcode):
