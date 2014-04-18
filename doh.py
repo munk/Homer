@@ -34,7 +34,9 @@ def search():
     if len(query) == 5:
         try:
             int(query)
-            return "zipcode " + query
+            return render_template('dataview.html',
+                           zipcode=query,
+                           data=get_grades(int(query)))
         except ValueError:
             pass  #it's maybe a name?
     if len(query) == 10:
