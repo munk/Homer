@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask.ext.pymongo import PyMongo
 import mongolab_cred as mc
+import model
 
 app = Flask(__name__)
 
@@ -9,19 +10,6 @@ app.config['MONGO_URI'] = uri  % (mc.username, mc.password)
 
 mongo = PyMongo(app)
 
-def get_grades(zipcode):
-    match = {"$match": {"ZIPCODE": zipcode}}
-    groupby = {"$group":
-        {"_id":
-            {"camis": "$CAMIS", 
-             "dba": "$DBA", 
-             "grade": "$CURRENTGRADE"}, 
-         "RECORDDATE": {"$max":"$RECORDDATE"}
-        }
-     }
-    rest_in_zip = mongo.db.ratings.aggregate([match, groupby])
-    return rest_in_zip['result']
-
 @app.route("/")
 def hello():
     return render_template('index.html')
@@ -29,34 +17,34 @@ def hello():
 @app.route("/search", methods=["POST"])
 def search():
     query = request.form.get('q')
+    print(query)
     if query is None:
         return redirect(url_for("hello"))
-    if len(query) == 5:
-        try:
-            int(query)
-            return render_template('dataview.html',
-                           zipcode=query,
-                           data=get_grades(int(query)))
-        except ValueError:
-            pass  #it's maybe a name?
-    if len(query) == 10:
-        try:
-            int(query)
-            return "phone " + query
-        except ValueError:
-            pass #it's maybe a name?
-    return "Business Name " + query
-       
+    if model.is_zipcode(query):
+        return render_template('dataview.html',
+                   zipcode=query,
+                   data=model.get_grades(int(query), mongo))
+    if model.is_phone_number(query):
+        return str(model.get_business(query, mongo))
+    return redirect(url_for("hello"))
+
+@app.route("/browse")
+@app.route("/browse/<boro>")
+def browse(boro=None):
+    if boro is None:
+        return render_template('browse.html')
+    else:
+        return boro
 
 @app.route("/stats/<int:zipcode>")
 def stats(zipcode):
-    return str(get_grades(zipcode))
+    return str(get_grades(zipcode, mongo))
 
 @app.route("/view/<int:zipcode>")
 def stats_view(zipcode):
     return render_template('dataview.html', 
                            zipcode=zipcode, 
-                           data=get_grades(zipcode))
+                           data=get_grades(zipcode, mongo))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
