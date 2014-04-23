@@ -1,10 +1,11 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.pymongo import PyMongo
 import mongolab_cred as mc
 import model
 
 app = Flask(__name__)
 
+app.secret_key = "some_secret"
 uri = "mongodb://%s:%s@ds029267.mongolab.com:29267/nyc_restaurants"
 app.config['MONGO_URI'] = uri  % (mc.username, mc.password)
 
@@ -17,16 +18,21 @@ def hello():
 @app.route("/search", methods=["POST"])
 def search():
     query = request.form.get('q')
-    print(query)
     if query is None:
         return redirect(url_for("hello"))
-    if model.is_zipcode(query):
+    elif model.is_zipcode(query):
         return render_template('dataview.html',
                    zipcode=query,
                    data=model.get_grades(int(query), mongo))
-    if model.is_phone_number(query):
-        return str(model.get_business(query, mongo))
-    return redirect(url_for("hello"))
+    elif model.is_phone_number(query):
+        business = model.get_business(query, mongo)
+        if business is None:
+            flash("Business not found")
+            return redirect(url_for("hello"))
+        return render_template("search.html",
+                               restaurant=business)
+    else:
+        return redirect(url_for("hello"))
 
 @app.route("/browse")
 @app.route("/browse/<boro>")

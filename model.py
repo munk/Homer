@@ -29,6 +29,8 @@ def get_business(phone, mongo):
     }
     rest_in_zip = mongo.db.ratings.aggregate([match, groupby])
     result = rest_in_zip['result']
+    if not result:
+        return None
     max_date = max([r['INSPECTIONDATE'] for r in result]) 
     latest = filter(lambda r: r['INSPECTIONDATE'] == max_date, result)
     return Restaurant(list(latest))
