@@ -12,25 +12,24 @@
 <div class=page>
     <div class="banner row white">
       <div class="jumbotron">
-{% with messages = get_flashed_messages() %}
-  {% if messages %}
-    <ul class=flashes>
-    {% for message in messages %}
-      <li>{{ message }}</li>
-    {% endfor %}
-    </ul>
-  {% endif %}
-{% endwith %}
             <div>
-                <h1> Should I eat here? </h1><br />
+                <h1>{{ restaurant.camis }}</h1><br />
             </div>
-        <form action="/search" method="POST" class="form-inline">
-            <div class="form-group">
-            <input type="search" name="q" data-toggle="tooltip" title="Enter a Zipcode or Phone Number" data-placement="bottom" class="form-control">
-            <input type="submit" class="btn btn-primary btn-lg" role="button" value="Search" name="submit">
-            <a href="/browse" class="btn btn-primary btn-lg" role="button">Browse</a>
-            </div>
-        </form>
+            <div>
+                Grade: {{ restaurant.grade }}
+           </div>
+            <div>
+                Score: {{ restaurant.score }}
+           </div>
+            <div>
+                Cuisine: {{ restaurant.cuisine }}
+           </div>
+            <div>
+                Violations: {{ restaurant.violations }}
+           </div>
+            <div>
+                Inspection Date: {{ restaurant.inspection_date }}
+           </div>
       </div>
     </div>
 </div>
