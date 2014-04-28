@@ -13,29 +13,30 @@
     <div class="banner row white">
       <div class="jumbotron">
             <div>
-                <h3>{{ restaurant.dba }}</h3><br />
+                <h1> Browse </h1><br />
             </div>
             <div>
-                <strong>Inspection Date:</strong> {{ restaurant.inspection_date.date() }}
-            <div>
-                <strong>Grade:</strong> {{ restaurant.grade }}
-           </div>
-            <div>
-                <strong>Score:</strong> {{ restaurant.score }}
-           </div>
-            <div>
-                <strong>Cuisine:</strong> {{ restaurant.cuisine }}
-           </div>
-            <div>
-                <strong>Violations:</strong> 
-                <ul>
-                {% for v in restaurant.violations %}
-                    <li> {{ v }} </li>
-                {% endfor %}
-                <br />
-                </ul>
-           </div>
-           </div>
+        <div>
+            Borough: <select>
+            <option value="1">Manhattan</option>
+            <option value="2">Brooklyn</option>
+            <option value="3">Queens</option>
+            <option value="4">The Bronx</option>
+            <option value="5">Staten Island</option>
+            </select>
+            {% for k, c in cuisine_codes.items() %}
+            <option value="{{ k }}"> {{ c }}</option>
+            {% endfor %}
+        </div>
+        <div>
+            Cuisine: <select>
+            <option value="-1">Any</option>
+            {% for k, c in cuisine_codes.items() %}
+            <option value="{{ k }}"> {{ c }}</option>
+            {% endfor %}
+            </select>
+        </div>
+        <a href="/browse" class="btn btn-primary" role="button">Browse</a>
       </div>
     </div>
 </div>
