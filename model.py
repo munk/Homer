@@ -1,7 +1,19 @@
 from restaurant import Restaurant
 
-def get_grades(zipcode, mongo):
-    match = {"$match": {"ZIPCODE": zipcode}}
+boro = {"manhattan": 1, 
+              "brooklyn": 3, 
+              "queens": 4,
+              "statenisland": 5, 
+              "thebronx": 2}
+
+def get_grades(key, mongo, kind="zipcode"):
+    match = {}
+    if kind == "zipcode":
+        match = {"$match": {"ZIPCODE": key}}
+    elif kind == "boro":
+        match = {"$match": {"BORO": boro[key]}}
+    else:
+        match = {"%match": {"CUISINE": key}}
     groupby = {"$group":
         {"_id":
             {"camis": "$CAMIS", 

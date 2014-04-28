@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.pymongo import PyMongo
 import mongolab_cred as mc
 import model
+from cuisine import cuisine_codes
 
 app = Flask(__name__)
 
@@ -38,19 +39,21 @@ def search():
 @app.route("/browse/<boro>")
 def browse(boro=None):
     if boro is None:
-        return render_template('browse.html')
+        return render_template('browse.html',
+                               cuisine_codes=cuisine_codes)
     else:
         return boro
 
 @app.route("/stats/<int:zipcode>")
 def stats(zipcode):
-    return str(get_grades(zipcode, mongo))
+    return str(model.get_grades(zipcode, mongo))
 
-@app.route("/view/<int:zipcode>")
-def stats_view(zipcode):
+@app.route("/view/<kind>/<key>")
+def stats_view(kind, key):
     return render_template('dataview.html', 
-                           zipcode=zipcode, 
-                           data=get_grades(zipcode, mongo))
+                           key=key, 
+                           kind=kind,
+                           data=model.get_grades(key, mongo, kind=kind))
 
 if __name__ == "__main__":
     app.run(host='0.0.0.0', debug=True)
