@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 cuisine_codes = {
     2: "African",
     3: "American",
