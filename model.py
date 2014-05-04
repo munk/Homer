@@ -1,4 +1,5 @@
 from restaurant import Restaurant
+from cuisine import res
 
 boro = {"manhattan": 1, 
               "brooklyn": 3, 
@@ -24,6 +25,17 @@ def get_grades(key, mongo, kind="zipcode"):
      }
     rest_in_zip = mongo.db.ratings.aggregate([match, groupby])
     return rest_in_zip['result']
+
+def get_summary(borough, cuisine, mongo):
+    borough = borough.replace(' ', '').lower()
+    if not cuisine:
+        query = {'BORO': boro[borough]}
+        subresult = mongo.db.ratings.find(query).distinct('CAMIS')
+    else:
+        query = {'BORO': boro[borough], 'CUISINECODE': res[cuisine]}
+        subresult = mongo.db.ratings.find(query).distinct('CAMIS')
+    result = mongo.db.ratings.find({'CAMIS': {"$in": subresult}})
+    return result
 
 def get_business(phone, mongo):
     match = {"$match": {"PHONE": phone}}

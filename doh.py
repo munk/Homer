@@ -35,14 +35,14 @@ def search():
     else:
         return redirect(url_for("hello"))
 
-@app.route("/browse")
-@app.route("/browse/<boro>")
-def browse(boro=None):
-    if boro is None:
-        return render_template('browse.html',
-                               cuisine_codes=cuisine_codes)
-    else:
-        return boro
+@app.route("/browse", methods=["GET", "POST"])
+def browse():
+    if request.method == 'POST':
+        requested_boro = request.form['boro']
+        requested_cuisine = cuisine_codes.get(int(request.form['cuisine']), False)
+        data = model.get_summary(requested_boro, requested_cuisine, mongo)
+        return render_template('summary.html', cuisine=requested_cuisine, boro=requested_boro, data=data)
+    return render_template('browse.html', cuisine_codes=cuisine_codes)
 
 @app.route("/stats/<int:zipcode>")
 def stats(zipcode):
@@ -50,8 +50,8 @@ def stats(zipcode):
 
 @app.route("/view/<kind>/<key>")
 def stats_view(kind, key):
-    return render_template('dataview.html', 
-                           key=key, 
+    return render_template('dataview.html',
+                           key=key,
                            kind=kind,
                            data=model.get_grades(key, mongo, kind=kind))
 

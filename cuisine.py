@@ -86,3 +86,5 @@ cuisine_codes = {
     84: "Vegetarian",
     0: "Not Listed/Not Applicable",
 }
+
+res = dict((v,k) for k,v in cuisine_codes.items())
