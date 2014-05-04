@@ -16,27 +16,29 @@
                 <h1> Browse </h1><br />
             </div>
             <div>
+            <form action="browse" id="browseform" method="POST">
         <div>
-            Borough: <select>
-            <option value="1">Manhattan</option>
-            <option value="2">Brooklyn</option>
-            <option value="3">Queens</option>
-            <option value="4">The Bronx</option>
-            <option value="5">Staten Island</option>
-            </select>
-            {% for k, c in cuisine_codes.items() %}
-            <option value="{{ k }}"> {{ c }}</option>
-            {% endfor %}
+                Borough: <select name="boro" form="browseform">
+                <option value="Manhattan">Manhattan</option>
+                    <option value="Brooklyn">Brooklyn</option>
+                    <option value="Queens">Queens</option>
+                    <option value="The Bronx">The Bronx</option>
+                    <option value="Staten Island">Staten Island</option>
+                </select>
+                {% for k, c in cuisine_codes.items() %}
+                    <option value="{{ k }}"> {{ c }}</option>
+                {% endfor %}
         </div>
         <div>
-            Cuisine: <select>
+            Cuisine: <select name="cuisine" form="browseform">
             <option value="-1">Any</option>
             {% for k, c in cuisine_codes.items() %}
             <option value="{{ k }}"> {{ c }}</option>
             {% endfor %}
             </select>
         </div>
-        <a href="/browse" class="btn btn-primary" role="button">Browse</a>
+        <input type="submit" class="btn btn-primary" role="button" name="Browse" />
+            </ form>
       </div>
     </div>
 </div>
