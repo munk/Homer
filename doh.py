@@ -38,10 +38,13 @@ def search():
 
 @app.route("/browse", methods=["GET", "POST"])
 def browse():
+    print("in browse")
     if request.method == 'POST':
+        print("in post")
         requested_boro = request.form['boro']
         requested_cuisine = cuisine_codes.get(int(request.form['cuisine']), False)
         data = model.get_summary(requested_boro, requested_cuisine, mongo)
+        print("preparing violations")
         violations = []
         viol_grp = data.groupby('VIOLCODE')
         violations = [(vl.get(name, "Unknown"), frame.CAMIS.count()) for name, frame in viol_grp]
