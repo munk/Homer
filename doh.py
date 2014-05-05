@@ -53,7 +53,7 @@ def browse():
     print("in get")
     try:
         print(render_template("browse.html", cuisine_codes=cuisine_codes))
-    except Exception e:
+    except Exception as e:
         print(e)
 
 
