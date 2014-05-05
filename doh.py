@@ -3,6 +3,7 @@ from flask.ext.pymongo import PyMongo
 import mongolab_cred as mc
 import model
 from cuisine import cuisine_codes
+from violation import violations as vl
 
 app = Flask(__name__)
 
@@ -41,7 +42,11 @@ def browse():
         requested_boro = request.form['boro']
         requested_cuisine = cuisine_codes.get(int(request.form['cuisine']), False)
         data = model.get_summary(requested_boro, requested_cuisine, mongo)
-        return render_template('summary.html', cuisine=requested_cuisine, boro=requested_boro, data=data)
+        violations = []
+        viol_grp = data.groupby('VIOLCODE')
+        violations = [(vl.get(name, "Unknown"), frame.CAMIS.count()) for name, frame in viol_grp]
+
+        return render_template('summary.html', cuisine=requested_cuisine, boro=requested_boro, data=data, violations=violations)
     return render_template('browse.html', cuisine_codes=cuisine_codes)
 
 @app.route("/stats/<int:zipcode>")

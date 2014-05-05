@@ -18,14 +18,30 @@
                 {% else %}
                    <h1> Summary for {{ cuisine }} in {{ boro }} </h1><br />
                 {% endif %}
-                <table>
-                {% for d in  data %}
-                <tr><td>{{ d }}</td></tr>
-                {% endfor %}
-                </table>
+
+          <div><strong>Average Score:</strong> {{ data.SCORE.mean() }} </div>
+          <div><strong>Total Establishments:</strong> {{ data.CAMIS.count() }} </div>
+          <div><strong>'A' Count:</strong> {{ data.CURRENTGRADE[data.CURRENTGRADE == 'A'].count() }}</div>
+          <div><strong>'B' Count:</strong> {{ data.CURRENTGRADE[data.CURRENTGRADE == 'B'].count() }}</div>
+          <div><strong>'C' Count:</strong> {{ data.CURRENTGRADE[data.CURRENTGRADE == 'C'].count() }}</div>
+          <div><strong>'Pending' Count:</strong> {{ data.CURRENTGRADE[data.CURRENTGRADE == 'Z'].count() }}</div>
+          <div><br />
+          <table class="table-striped table-bordered table table-condensed">
+              <thead>
+                <tr><th>Name</th><th>Count</th></tr>
+              </thead>
+              <tbody>
+                  {% for name, count in violations %}
+                      <tr><td>{{ name }}</td><td>{{ count }}</td?</tr>
+                  {% endfor %}
+              </tbody>
+          </table>
+          </div>
+
             </div>
       </div>
     </div>
+
 </div>
 </div>
 <script>
