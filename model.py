@@ -1,63 +1,48 @@
 from restaurant import Restaurant
 from cuisine import res
+from dao import GradeDAO
+import pandas as pd
 
-boro = {"manhattan": 1, 
-              "brooklyn": 3, 
+boro = {"manhattan": 1,
+              "brooklyn": 3,
               "queens": 4,
-              "statenisland": 5, 
+              "statenisland": 5,
               "thebronx": 2}
 
-def get_grades(key, mongo, kind="zipcode"):
-    match = {}
-    if kind == "zipcode":
-        match = {"$match": {"ZIPCODE": key}}
-    elif kind == "boro":
-        match = {"$match": {"BORO": boro[key]}}
-    else:
-        match = {"%match": {"CUISINE": key}}
-    groupby = {"$group":
-        {"_id":
-            {"camis": "$CAMIS", 
-             "dba": "$DBA", 
-             "grade": "$CURRENTGRADE"}, 
-         "RECORDDATE": {"$max":"$RECORDDATE"}
-        }
-     }
-    rest_in_zip = mongo.db.ratings.aggregate([match, groupby])
-    return rest_in_zip['result']
 
-def get_summary(borough, cuisine, mongo):
-    borough = borough.replace(' ', '').lower()
-    if not cuisine:
-        query = {'BORO': boro[borough]}
-        subresult = mongo.db.ratings.find(query).distinct('CAMIS')
+def get_grades(key, mongo, kind="zipcode"):
+    """Retrieve grades grouped by key"""
+    dao = GradeDAO(mongo)
+    if kind == "zipcode":
+        return dao.get_grade_by_zipcode(key)
+    elif kind == "boro":
+        return dao.get_grade_by_boro(key)
     else:
-        query = {'BORO': boro[borough], 'CUISINECODE': res[cuisine]}
-        subresult = mongo.db.ratings.find(query).distinct('CAMIS')
-    result = mongo.db.ratings.find({'CAMIS': {"$in": subresult}})
-    return result
+        return dao.get_grade_by_cuisine(key)
+
+
+def get_summary(boro, cuisine, mongo):
+    dao = GradeDAO(mongo)
+    boro = boro.replace(' ', '').lower()
+    result = dao.get_summary(boro, cuisine)
+    if not result:
+        return "No results found"
+
+    df = pd.DataFrame([r for r in result])
+    keys = df.groupby('CAMIS')['INSPDATE'].transform(max) == df.INSPDATE
+    have_grades =  df[keys].dropna(subset=['CURRENTGRADE'])
+    return have_grades
+
 
 def get_business(phone, mongo):
-    match = {"$match": {"PHONE": phone}}
-    groupby = {"$group":
-        {"_id":
-            {"insp_id" : "$_id",
-             "camis": "$CAMIS", 
-             "dba": "$DBA", 
-             "score": "$SCORE", 
-             "cuisine": "$CUISINECODE", 
-             "violation": "$VIOLCODE",
-             "grade": "$CURRENTGRADE"}, 
-         "INSPECTIONDATE": {"$max":"$INSPDATE"},
-        }
-    }
-    rest_in_zip = mongo.db.ratings.aggregate([match, groupby])
-    result = rest_in_zip['result']
+    dao = GradeDAO(mongo)
+    result = dao.get_grade_by_phone(phone)
     if not result:
         return None
-    max_date = max([r['INSPECTIONDATE'] for r in result]) 
+    max_date = max([r['INSPECTIONDATE'] for r in result])
     latest = filter(lambda r: r['INSPECTIONDATE'] == max_date, result)
     return Restaurant(list(latest))
+
 
 def is_phone_number(number):
     number_reduced = number.replace('-', '').replace(' ', '').replace('(', '').replace(')', '')
@@ -67,10 +52,10 @@ def is_phone_number(number):
     except ValueError:
         return False
 
+
 def is_zipcode(zipcode):
     try:
         int(zipcode)
         return len(zipcode) == 5
     except ValueError:
         return False
-
