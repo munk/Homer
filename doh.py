@@ -20,13 +20,17 @@ def hello():
 @app.route("/search", methods=["POST"])
 def search():
     query = request.form.get('q')
+    print(query)
+    print("in search")
     if query is None:
         return redirect(url_for("hello"))
     elif model.is_zipcode(query):
+        print ("is zipcode")
         return render_template('dataview.html',
                    zipcode=query,
                    data=model.get_grades(int(query), mongo))
     elif model.is_phone_number(query):
+        print("is phone")
         business = model.get_business(query, mongo)
         if business is None:
             flash("Business not found")
@@ -38,25 +42,15 @@ def search():
 
 @app.route("/browse", methods=["GET", "POST"])
 def browse():
-    print("in browse")
     if request.method == 'POST':
-        print("in post")
         requested_boro = request.form['boro']
         requested_cuisine = cuisine_codes.get(int(request.form['cuisine']), False)
         data = model.get_summary(requested_boro, requested_cuisine, mongo)
-        print("preparing violations")
         violations = []
         viol_grp = data.groupby('VIOLCODE')
         violations = [(vl.get(name, "Unknown"), frame.CAMIS.count()) for name, frame in viol_grp]
 
         return render_template('summary.html', cuisine=requested_cuisine, boro=requested_boro, data=data, violations=violations)
-    print("in get")
-    try:
-        print(render_template("browse.html", cuisine_codes=cuisine_codes))
-    except Exception as e:
-        print(e)
-
-
     return render_template('browse.html', cuisine_codes=cuisine_codes)
 
 @app.route("/stats/<int:zipcode>")
