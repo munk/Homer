@@ -35,7 +35,7 @@ class GradeDAO(object):
         return self.__get_grades__(match)
 
     def get_grade_by_phone(self, key):
-        match = {"$match": {"PHONE": phone}}
+        match = {"$match": {"PHONE": key}}
         groupby = {
             "$group":{"_id":
                          {"insp_id" : "$_id",
