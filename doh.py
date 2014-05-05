@@ -51,6 +51,12 @@ def browse():
 
         return render_template('summary.html', cuisine=requested_cuisine, boro=requested_boro, data=data, violations=violations)
     print("in get")
+    try:
+        print(render_template("browse.html", cuisine_codes=cuisine_codes))
+    except Exception e:
+        print(e)
+
+
     return render_template('browse.html', cuisine_codes=cuisine_codes)
 
 @app.route("/stats/<int:zipcode>")
