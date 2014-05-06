@@ -5,6 +5,7 @@ class GradeDAO(object):
         {"_id":
             {"camis": "$CAMIS",
              "dba": "$DBA",
+             "phone": "$PHONE",
              "grade": "$CURRENTGRADE"},
          "RECORDDATE": {"$max":"$RECORDDATE"}
         }
