@@ -1,0 +1,58 @@
+#+AUTHOR: John Downs
+#+TITLE: Homer: NYC DOH Restaurant Inspection Data
+#+SUBTITLE: Should I eat here?
+
+[[file:~/Downloads/m3BIgUSSL_cEa9lQKoGltqYZLbHBc72bhPzE9zRIObw.jpeg]]
+
+
+* Where the data comes from
+**  https://nycopendata.socrata.com/Health/Restaurant-Inspection-Results/4vkw-7nck?
+
+
+    ** 4 csv files
+    ** One file had interesting data. Three were definitions.
+
+    ** Needed cleaning https://github.com/data-nyc/restaurant-inspection-cleaner
+
+
+* Where to find the app
+** http://homer-nyc.herokuapp.com/
+
+
+* The stack
+** Python 3.4
+** Pandas
+** Flask
+** Heroku
+** Gunicorn
+** Twitter bootstrap
+** Mongolab
+
+
+* The features
+** Search
+** Browse
+
+* PaaS
+** Deploying to Heroku
+** Using mongolab
+
+
+* The code
+  doh.py
+  model.py
+  dao.py
+  restaurant.py
+  violation.py
+  cuisine.py
+  test.py
+  creds
+
+
+* The process
+** Testing failures
+
+
+* Future work
+** Smarter Search - by business name?
+** Better UI/UX
