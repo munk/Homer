@@ -4,12 +4,14 @@ import mongolab_cred as mc
 import model
 from cuisine import cuisine_codes
 from violation import violations as vl
+import os
 
 app = Flask(__name__)
 
-app.secret_key = "some_secret"
+app.secret_key = os.urandom(24)
 uri = "mongodb://%s:%s@ds029267.mongolab.com:29267/nyc_restaurants"
-app.config['MONGO_URI'] = uri  % (mc.username, mc.password)
+app.config['MONGO_URI'] = uri  % (os.environ.get('mongolab_username'),
+                                  os.environ.get('mongolab_password'))
 
 mongo = PyMongo(app)
 
