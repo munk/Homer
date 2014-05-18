@@ -9,7 +9,7 @@ import os
 app = Flask(__name__)
 
 app.secret_key = os.urandom(24)
-uri = "mongodb://%s:%s@ds029267.mongolab.com:29267/nyc_restaurants"
+uri = "mongodb://%s:%s@ds049558.mongolab.com:49558/nyc_restaurants"
 app.config['MONGO_URI'] = uri  % (os.environ.get('mongolab_username'),
                                   os.environ.get('mongolab_password'))
 
