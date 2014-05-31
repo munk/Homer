@@ -1,4 +1,4 @@
 DOH
 ===
 
-NYC Restaurant Inspection Browser
+NYC Restaurant Inspection Browser. It's awesome, you should use it.

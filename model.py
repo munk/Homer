@@ -10,7 +10,7 @@ boro = {"manhattan": 1,
               "thebronx": 2}
 
 
-def get_grades(key, mongo, kind="zipcode"):
+def ga et_grades(key, mongo, kind="zipcode"):
     """Retrieve grades grouped by key"""
     dao = GradeDAO(mongo)
     if kind == "zipcode":
