@@ -17,6 +17,7 @@ mongo = PyMongo(app)
 
 @app.route("/")
 def hello():
+    1 / 0
     return render_template('index.html')
 
 @app.route("/search", methods=["POST"])
