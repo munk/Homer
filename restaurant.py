@@ -3,6 +3,7 @@ from cuisine import cuisine_codes
 
 class Restaurant(object):
     def __init__(self, data):
+        boro = {1: 'manhattan', 2: 'the bronx', 3: 'brooklyn', 4: 'queens', 5: 'staten island'}
         self.inspection_date = data[0]['INSPECTIONDATE']
         self.grade = data[0]['_id']['grade']
         self.camis = data[0]['_id']['camis']
@@ -10,6 +11,10 @@ class Restaurant(object):
         self.cuisine = cuisine_codes[int(data[0]['_id']['cuisine'])]
         self.score = data[0]['_id']['score']
         self.violations = []
+        self.address = ' '.join([data[0]['_id']['building'],
+                                data[0]['_id']['street'],
+                                boro[data[0]['_id']['boro']],
+                                str(int(data[0]['_id']['zipcode']))])
 
         for v in [d['_id']['violation'] for d in data]:
             self.violations.append(violations[v])
