@@ -1,5 +1,6 @@
 from violation import violations
 from cuisine import cuisine_codes
+from pygeocoder import Geocoder
 
 class Restaurant(object):
     def __init__(self, data):
@@ -15,6 +16,7 @@ class Restaurant(object):
                                 data[0]['_id']['street'],
                                 boro[data[0]['_id']['boro']],
                                 str(int(data[0]['_id']['zipcode']))])
+        self.geocode = Geocoder.geocode(self.address)
 
         for v in [d['_id']['violation'] for d in data]:
             self.violations.append(violations[v])

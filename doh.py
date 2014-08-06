@@ -3,6 +3,8 @@ from flask.ext.pymongo import PyMongo
 import model
 from cuisine import cuisine_codes
 from violation import violations as vl
+from flask.ext.googlemaps import GoogleMaps
+from flask.ext.googlemaps import Map
 import os
 
 app = Flask(__name__)
@@ -12,7 +14,7 @@ uri = "mongodb://%s:%s@ds049558.mongolab.com:49558/nyc_restaurants"
 app.config['MONGO_URI'] = uri  % (os.environ.get('mongolab_username'),
                                   os.environ.get('mongolab_password'))
 
-print(uri)
+GoogleMaps(app)
 mongo = PyMongo(app)
 
 @app.route("/")
@@ -37,8 +39,14 @@ def search():
         if business is None:
             flash("Business not found")
             return redirect(url_for("hello"))
+        mymap = Map(
+            identifier="view-side",
+            lat=business.geocode.coordinates[0],
+            lng=business.geocode.coordinates[1],
+        )
         return render_template("search.html",
-                               restaurant=business)
+                               restaurant=business,
+                               mymap=mymap)
     else:
         return redirect(url_for("hello"))
 

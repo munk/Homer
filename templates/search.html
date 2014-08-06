@@ -6,6 +6,9 @@
 <script src="http://code.jquery.com/jquery-2.0.3.min.js"></script>
 <script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.1.1/js/bootstrap-tooltip.min.js"></script>
+{{"decoupled-map"|googlemap_js(restaurant.geocode.coordinates[0], restaurant.geocode.coordinates[1], markers=[(restaurant.geocode.coordinates[0], restaurant.geocode.coordinates[1])])}}
+
+{{mymap.js}}
 </head>
 <body>
 <div class="container">
@@ -27,7 +30,7 @@
                 <strong>Cuisine:</strong> {{ restaurant.cuisine }}
            </div>
             <div>
-                <strong>Address:</strong> {{ restaurant.address}}
+                <strong>Address:</strong> {{ restaurant.address }} {{ restaurant.geocode.coordinates }}
            </div>
             <div>
                 <strong>Violations:</strong> 
@@ -39,6 +42,9 @@
                 </ul>
            </div>
            </div>
+      </div>
+      <div> 
+         {{"decoupled-map"|googlemap_html(restaurant.geocode.coordinates[0], restaurant.geocode.coordinates[1])}}
       </div>
     </div>
 </div>
