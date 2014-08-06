@@ -45,7 +45,10 @@ class GradeDAO(object):
                           "score": "$SCORE",
                           "cuisine": "$CUISINECODE",
                           "violation": "$VIOLCODE",
-                          "grade": "$CURRENTGRADE"},
+                          "grade": "$CURRENTGRADE",
+                          "building": "$BUILDING",
+                          "street": "$STREET",
+                          "boro": "$BORO",},
                     "INSPECTIONDATE": {"$max":"$INSPDATE"}}}
         return self.__get_grades__(match, groupby)
 
