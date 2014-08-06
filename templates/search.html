@@ -27,6 +27,9 @@
                 <strong>Cuisine:</strong> {{ restaurant.cuisine }}
            </div>
             <div>
+                <strong>Address:</strong> {{ restaurant.building }} {{restaurant.street}} {{restaurant.boro }} {{restaurant.zipcode}}
+           </div>
+            <div>
                 <strong>Violations:</strong> 
                 <ul>
                 {% for v in restaurant.violations %}
