@@ -13,3 +13,5 @@ python-dateutil==2.2
 pytz==2014.2
 requests==2.2.1
 six==1.6.1
+pygeocoder==1.2.5
+Flask-GoogleMaps==0.1.5

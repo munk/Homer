@@ -1,6 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask.ext.pymongo import PyMongo
-import mongolab_cred as mc
 import model
 from cuisine import cuisine_codes
 from violation import violations as vl
@@ -13,11 +12,11 @@ uri = "mongodb://%s:%s@ds049558.mongolab.com:49558/nyc_restaurants"
 app.config['MONGO_URI'] = uri  % (os.environ.get('mongolab_username'),
                                   os.environ.get('mongolab_password'))
 
+print(uri)
 mongo = PyMongo(app)
 
 @app.route("/")
 def hello():
-    1 / 0
     return render_template('index.html')
 
 @app.route("/search", methods=["POST"])
